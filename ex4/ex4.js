@@ -8,11 +8,11 @@ const file = "data.json";
 const URL = "http://numbersapi.com/";
 fs.readFile(`${__dirname}/${file}`, "utf-8", (err, data) => {
   if (err) {
-    console.log(err);
+    console.log(err.message);
     return;
   }
   if (!data) {
-    console.log("Brak danych do wczytania!");
+    console.log("No data to load!");
     return;
   }
   const { number, filename } = JSON.parse(data);
@@ -25,7 +25,7 @@ fs.readFile(`${__dirname}/${file}`, "utf-8", (err, data) => {
     number.includes(",") ||
     !filename.includes(".json")
   ) {
-    console.log(`Nieprawidłowy format danych wejściowych. Plik data.json powinien wyglądać jak na przykładzie:
+    console.log(`Invalid input data format! The data.json file should look like the example:
     
     {
         "number": "12",
@@ -44,7 +44,9 @@ async function getNumberInfo(number, filename) {
       if (error) {
         console.log(error);
       } else {
-        console.log(`File written successfully! It has the following contents:`);
+        console.log(
+          `File written successfully! It has the following contents:`
+        );
         console.log(fs.readFileSync("file.json", "utf-8"));
       }
     });
