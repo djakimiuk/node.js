@@ -17,7 +17,7 @@ async function getInfo(location) {
       `The weather in ${location}: ${responseData.weather[0].main}, ${responseData.weather[0].description}`
     );
   } catch (err) {
-    console.log(`There was an error: ${err.response.data.message}`);
+    console.log(`There was an error response from server: '${err.response.data.message}'. Check wether input values are correct.`);
   }
 }
 

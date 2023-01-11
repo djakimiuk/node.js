@@ -26,7 +26,7 @@ async function getUserInfo(inputLogin, inputFollowers) {
       weather.getInfo(location);
     }
   } catch (err) {
-    console.log(err);
+    console.log(`There was an error response from server: '${err.response.data.message}'. Check wether input values are correct.`);
   }
 }
 
