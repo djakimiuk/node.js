@@ -17,13 +17,16 @@ fs.readFile(`${__dirname}/${file}`, "utf-8", (err, data) => {
   }
   const { number, filename } = JSON.parse(data);
   if (
-    Number.isInteger(number) ||
+    !Number.isInteger(+number) ||
     !number ||
     !filename ||
     number == "" ||
-    filename == ""
+    filename == "" ||
+    number.includes(",") ||
+    !filename.includes(".json")
   ) {
     console.log(`Nieprawidłowy format danych wejściowych. Plik data.json powinien wyglądać jak na przykładzie:
+    
     {
         "number": "12",
         "filename": "file.json"
@@ -33,10 +36,18 @@ fs.readFile(`${__dirname}/${file}`, "utf-8", (err, data) => {
   getNumberInfo(number, filename);
 });
 
-async function getNumberInfo(number, fileName) {
+async function getNumberInfo(number, filename) {
   try {
     const response = await axios.get(`${URL}${number}`);
-    console.log(response.data);
+    const responseData = response.data;
+    fs.writeFile(filename, responseData, (error) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(`File written successfully! It has the following contents:`);
+        console.log(fs.readFileSync("file.json", "utf-8"));
+      }
+    });
   } catch (err) {
     console.log(err);
   }
