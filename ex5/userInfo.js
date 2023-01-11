@@ -1,9 +1,11 @@
 const axios = require("axios");
 const URL = "https://api.github.com/users/";
+const weather = require("./weatherInfo");
 async function getUserInfo(inputLogin, inputFollowers) {
   try {
     const response = await axios.get(`${URL}${inputLogin}`);
-    const { name, followers, public_repos, repos_url } = response.data;
+    const { name, followers, public_repos, repos_url, location } =
+      response.data;
     const reposNames = await axios.get(`${repos_url}`);
     const reposNamesArr = [];
     reposNames.data.forEach((el) => reposNamesArr.push(el.name));
@@ -14,12 +16,14 @@ async function getUserInfo(inputLogin, inputFollowers) {
       - number of public repos: ${public_repos},
       - repos names: ${reposNamesArr}
       `);
+      weather.getInfo(location);
     } else {
       console.log(`User information:
           - name: ${name}, 
           - number of public repos: ${public_repos},
           - repos names: ${reposNamesArr}
           `);
+      weather.getInfo(location);
     }
   } catch (err) {
     console.log(err);

@@ -1,6 +1,5 @@
 const argv = require("yargs").argv;
 const github = require("./userInfo");
-const weather = require("./weatherInfo");
 
 const { login, followers } = argv;
 
@@ -18,4 +17,4 @@ if (followers !== "y" && followers !== undefined) {
   return;
 }
 github.getUserInfo(login, followers);
-weather.getInfo(location);
+
