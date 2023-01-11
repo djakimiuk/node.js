@@ -4,15 +4,15 @@ const github = require("./userInfo");
 const { login, followers } = argv;
 
 if (!login) {
-  console.log(`Brak danych wejściowych! Powinieneś uruchomić program w konsoli w następujący sposób:
+  console.log(`No input data! You should run the program in the console as follows:
   node ex5.js --login nazwaUzytkownika --followers y*
-  *parametr --login jest obowiązkowy, --followers jest nieobowiązkowy`);
+  *parameter --login is required, --followers is not required`);
   return;
 }
 if (followers !== "y" && followers !== undefined) {
-  console.log(`Parametr --followers przyjmuje tylko wartość 'y'. Przykład użycia:
+  console.log(`Parameter --followers only accepts the value 'y'. Usage example:
     node ex5.js --login username --followers y
-    lub 
+    OR
     node ex5.js --login username`);
   return;
 }
