@@ -15,7 +15,7 @@ const addCommand = yargs
         if (error) {
           fs.writeFile(
             fileName,
-            "To do list:" + "\n" + argv._[1],
+            "To do list:" + "\n" + argv._.splice(1),
             { flag: "a" },
             (error) => {
               if (error) {
@@ -27,8 +27,7 @@ const addCommand = yargs
           );
           return;
         } else {
-          console.log(argv._.length);
-          fs.writeFile(fileName, "\n" + argv._[1], { flag: "a" }, (error) => {
+          fs.writeFile(fileName, "\n" + argv._.splice(1), { flag: "a" }, (error) => {
             if (error) {
               console.log(error);
             } else {

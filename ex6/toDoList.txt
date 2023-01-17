@@ -1,5 +1,3 @@
 To do list:
-chleb
-mleko
-jajka
-jajka
+napisac program na zaliczenie z NodeJS
+pojsc na silownie
