@@ -13,6 +13,7 @@ async function getInfo(location) {
     //   console.log("Invalid location!");
     // }
     const responseData = response.data;
+    // sprawdzenie poprawnosc daty response daty
     console.log(
       `The weather in ${location}: ${responseData.weather[0].main}, ${responseData.weather[0].description}`
     );

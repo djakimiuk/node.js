@@ -6,6 +6,7 @@ async function getUserInfo(inputLogin, inputFollowers) {
     const response = await axios.get(`${URL}${inputLogin}`);
     const { name, followers, public_repos, repos_url, location } =
       response.data;
+      //dodać if do reposname
     const reposNames = await axios.get(`${repos_url}`);
     const reposNamesArr = [];
     reposNames.data.forEach((el) => reposNamesArr.push(el.name));
