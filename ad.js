@@ -11,9 +11,9 @@ mongoose.connect(url).then((result) => {
 });
 
 const adSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  author: String,
+  title: { type: String, required: [true, "Title required!"] },
+  description: { type: String, required: [true, "Description required!"] },
+  author: { type: String, required: [, "Author required!"] },
   category: {
     type: String,
     enum: [
@@ -27,18 +27,30 @@ const adSchema = new mongoose.Schema({
       "Events",
       "Cars",
     ],
+    required: [true, "Category required!"],
   },
   tags: [{ type: String }],
-  price: Number,
+  price: { type: Number, required: [true, "Price required!"] },
   currency: {
     type: String,
     enum: ["PLN", "USD", "EUR", "GBP"],
     default: "PLN",
+    required: [true, "Currency required!"],
   },
-  location: String,
-  Contact: String,
+  location: { type: String, required: [true, "Location required!"] },
+  Contact: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        return /\d{3}-\d{3}-\d{4}/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+    required: [true, "Phone number required!"],
+  },
   creationDate: { type: Date, default: new Date() },
-  dueDate: Date,
+  durationTime: { type: Number, default: 7 },
+  dueDate: { type: Date },
   isActive: { type: Boolean, default: true },
 });
 
