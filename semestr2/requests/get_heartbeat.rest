@@ -1,0 +1,3 @@
+@host = http://localhost:4700/heartbeat
+
+GET {{host}}
