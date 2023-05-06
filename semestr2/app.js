@@ -71,12 +71,18 @@ app.get("/ads/:id", (req, res) => {
           );
         },
         json: function () {
-          res.json(ad.toJSON());
+          res.json(ad);
         },
       });
     } else {
       res.status(404).end();
     }
+  });
+});
+
+app.get("/ads", (req, res) => {
+  Ad.find({}).then((ads) => {
+    res.json(ads);
   });
 });
 
