@@ -45,6 +45,41 @@ app.post("/ads", (req, res) => {
     .catch((error) => console.log(error.message));
 });
 
+app.get("/ads/:id", (req, res) => {
+  Ad.findById(req.params.id).then((ad) => {
+    if (ad) {
+      res.format({
+        html: function () {
+          res.send(`<div>
+          <p>ID: ${ad.id}</p>
+          <p>Title: ${ad.title}</p>
+          <p>Description: ${ad.description}</p>
+          <p>Author: ${ad.author}</p>
+          <p>Category: ${ad.category}</p>
+          <p>Tags: ${ad.tags}</p>
+          <p>Price: ${ad.price} ${ad.currency}</p>
+          <p>Location: ${ad.location}</p>
+          <p>Contact: ${ad.contact}</p>
+          <p>Creation date: ${ad.creationDate}</p>
+          <p>Duration time: ${ad.durationTime} days</p>
+          <p>Active: ${ad.isActive}</p>
+          </div>`);
+        },
+        text: function () {
+          res.send(
+            `ID: ${ad.id}, Title: ${ad.title}, Description: ${ad.description}, Author: ${ad.author}, Category: ${ad.category}, Tags: ${ad.tags}, Price: ${ad.price} ${ad.currency}, Location: ${ad.location}, Contact: ${ad.contact}, Creation date: ${ad.creationDate}, Duration time: ${ad.durationTime} days, Active: ${ad.isActive}`
+          );
+        },
+        json: function () {
+          res.json(ad.toJSON());
+        },
+      });
+    } else {
+      res.status(404).end();
+    }
+  });
+});
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

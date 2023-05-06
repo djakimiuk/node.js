@@ -16,7 +16,7 @@ mongoose
 const adSchema = new mongoose.Schema({
   title: { type: String, required: [true, "Title required!"] },
   description: { type: String, required: [true, "Description required!"] },
-  author: { type: String, required: [, "Author required!"] },
+  author: { type: String, required: [true, "Author required!"] },
   category: {
     type: String,
     enum: [

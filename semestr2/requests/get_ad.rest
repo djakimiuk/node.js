@@ -1,0 +1,5 @@
+@host = http://localhost:{{PORT}}
+
+GET {{host}}/ads/6456b3e9f278f146a71f4d46
+Accept: text/html
+
