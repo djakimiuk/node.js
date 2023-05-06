@@ -51,7 +51,7 @@ const adSchema = new mongoose.Schema({
     },
     required: [true, "Phone number required!"],
   },
-  creationDate: { type: Date, default: new Date() },
+  creationDate: { type: Date, default: new Date(), immutable: true },
   durationTime: { type: Number, default: 7 },
   isActive: { type: Boolean, default: true },
 });

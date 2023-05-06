@@ -94,6 +94,31 @@ app.delete("/ads/:id", (req, res) => {
     .catch((error) => console.log(error));
 });
 
+app.put("/ads/:id", (req, res) => {
+  const body = req.body;
+
+  const ad = {
+    title: body.title,
+    description: body.description,
+    author: body.author,
+    category: body.category,
+    tags: body.tags,
+    price: body.price,
+    currency: body.currency,
+    location: body.location,
+    contact: body.contact,
+    creationDate: body.creationDate,
+    durationTime: body.durationTime,
+    isActive: body.isActive,
+  };
+
+  Ad.findByIdAndUpdate(req.params.id, ad, { new: true })
+    .then((updatedAd) => {
+      res.json(updatedAd);
+    })
+    .catch((error) => console.log(error));
+});
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
