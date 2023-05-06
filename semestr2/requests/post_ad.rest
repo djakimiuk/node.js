@@ -1,0 +1,16 @@
+@host = http://localhost:{{{PORT}}
+
+POST {{host}}/ads
+Content-Type: application/json
+
+{
+    "title": "Sprzedam Opla",
+    "description": " Sprzedam Opla 2005 r., stan igła, jeżdżony do kościoła",
+    "author": "Janusz Mucha",
+    "category": "Cars",
+    "tags": ["tanio", "okazja"], 
+    "price": 10000,
+    "currency": "PLN",
+    "location": "Białystok", 
+    "contact": "123-456-789"
+}
