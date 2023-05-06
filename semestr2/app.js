@@ -86,6 +86,14 @@ app.get("/ads", (req, res) => {
   });
 });
 
+app.delete("/ads/:id", (req, res) => {
+  Ad.findByIdAndRemove(req.params.id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((error) => console.log(error));
+});
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
