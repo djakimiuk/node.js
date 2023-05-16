@@ -16,8 +16,7 @@ app.use(bodyParser.json());
 app.use(loggerMiddleware);
 
 app.get("/heartbeat", (req, res) => {
-  const today = new Date();
-  res.send(today);
+  res.send(new Date().toISOString());
 });
 
 app.post("/ads", (req, res) => {
@@ -81,9 +80,32 @@ app.get("/ads/:id", (req, res) => {
 });
 
 app.get("/ads", (req, res) => {
-  Ad.find({}).then((ads) => {
-    res.json(ads);
-  });
+  const queryObj = req.query;
+  if (!queryObj) {
+    Ad.find({}).then((ads) => {
+      res.json(ads);
+    });
+  } else {
+    const caseInsensitiveQueryObj = { ...queryObj };
+    Object.keys(queryObj).forEach((key) => {
+      if (
+        [
+          "title",
+          "description",
+          "author",
+          "category",
+          "tags",
+          "currency",
+          "location",
+        ].includes(key)
+      ) {
+        caseInsensitiveQueryObj[key] = { $regex: queryObj[key], $options: "i" };
+      }
+    });
+    Ad.find(caseInsensitiveQueryObj).then((ads) => {
+      res.json(ads);
+    });
+  }
 });
 
 app.delete("/ads/:id", (req, res) => {
