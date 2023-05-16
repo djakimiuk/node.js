@@ -86,7 +86,8 @@ app.get("/ads", (req, res) => {
       res.json(ads);
     });
   } else {
-    const caseInsensitiveQueryObj = { ...queryObj };
+    let caseInsensitiveQueryObj = { ...queryObj };
+
     Object.keys(queryObj).forEach((key) => {
       if (
         [
@@ -101,8 +102,31 @@ app.get("/ads", (req, res) => {
       ) {
         caseInsensitiveQueryObj[key] = { $regex: queryObj[key], $options: "i" };
       }
+      if (key.match(/^creationdate$/i)) {
+        caseInsensitiveQueryObj.creationDate = queryObj[key];
+        delete caseInsensitiveQueryObj[key];
+      }
+      if (key.match(/^durationtime$/i)) {
+        caseInsensitiveQueryObj.durationTime = queryObj[key];
+        delete caseInsensitiveQueryObj[key];
+      }
+      if (key.match(/^isactive$/i)) {
+        caseInsensitiveQueryObj.isActive = queryObj[key];
+        delete caseInsensitiveQueryObj[key];
+      }
     });
-    Ad.find(caseInsensitiveQueryObj).then((ads) => {
+
+    let queryStr = JSON.stringify(caseInsensitiveQueryObj);
+
+    const operatorRegex = new RegExp(/\b(lte|lt|gte|gt)\b/g);
+
+    queryStr = queryStr.replace(operatorRegex, (match) => `$${match}`);
+
+    console.log(queryStr);
+
+    const query = JSON.parse(queryStr);
+
+    Ad.find(query).then((ads) => {
       res.json(ads);
     });
   }
