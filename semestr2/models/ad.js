@@ -54,6 +54,10 @@ const adSchema = new mongoose.Schema({
   creationDate: { type: Date, default: new Date(), immutable: true },
   durationTime: { type: Number, default: 7 },
   isActive: { type: Boolean, default: true },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 adSchema.set("toJSON", {
