@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Full name required!"],
   },
-  passwordHash: String,
+  passwordHash: { type: String, required: [true, "Password required!"] },
   ads: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -34,9 +34,10 @@ const userSchema = new mongoose.Schema({
 
 userSchema.set("toJSON", {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject.id.toString();
+    returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
+    delete returnedObject.passwordHash;
   },
 });
 
