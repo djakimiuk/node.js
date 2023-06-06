@@ -4,20 +4,13 @@ const bodyParser = require("body-parser");
 const app = express();
 const adsRouter = require("./controllers/ads");
 const usersRouter = require("./controllers/users");
-
-const loggerMiddleware = (req, res, next) => {
-  console.log("Method:", req.method);
-  console.log("Path:", req.path);
-  console.log("Body:", req.body);
-  console.log("###############");
-  next();
-};
+const middleware = require("./utils/middleware");
 
 app.use(bodyParser.json());
-app.use(loggerMiddleware);
-
-app.use("/api/ads", adsRouter);
+app.use(middleware.loggerMiddleware);
 app.use("/api/users", usersRouter);
+app.use(middleware.authMiddleware);
+app.use("/api/ads", adsRouter);
 
 app.get("/heartbeat", (req, res) => {
   res.send(new Date().toISOString());

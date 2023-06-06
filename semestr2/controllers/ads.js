@@ -1,8 +1,10 @@
 const adsRouter = require("express").Router();
 const Ad = require("../models/ad");
 
-adsRouter.post("/", (req, res) => {
+adsRouter.post("/", async (req, res) => {
   const body = req.body;
+
+  const user = await user.findById(body.userId);
 
   const ad = new Ad({
     title: body.title,
@@ -15,7 +17,6 @@ adsRouter.post("/", (req, res) => {
     location: body.location,
     contact: body.contact,
     creationDate: new Date(),
-    durationTime: body.durationTime || 7,
     isActive: true,
   });
 
