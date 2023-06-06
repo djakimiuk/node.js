@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const adsRouter = require("./controllers/ads");
+const usersRouter = require("./controllers/users");
 
 const loggerMiddleware = (req, res, next) => {
   console.log("Method:", req.method);
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use(loggerMiddleware);
 
 app.use("/api/ads", adsRouter);
+app.use("/api/users", usersRouter);
 
 app.get("/heartbeat", (req, res) => {
   res.send(new Date().toISOString());
