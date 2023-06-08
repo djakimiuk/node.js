@@ -31,12 +31,13 @@ adsRouter.post("/", async (req, res) => {
   //     .catch((error) => console.log(error.message));
 });
 
-adsRouter.get("/:id", (req, res) => {
-  Ad.findById(req.params.id).then((ad) => {
-    if (ad) {
-      res.format({
-        html: function () {
-          res.send(`<div>
+adsRouter.get("/:id", async (req, res) => {
+  const ad = await Ad.findById(req.params.id);
+  
+  if (ad) {
+    res.format({
+      html: function () {
+        res.send(`<div>
             <p>ID: ${ad.id}</p>
             <p>Title: ${ad.title}</p>
             <p>Description: ${ad.description}</p>
@@ -50,20 +51,19 @@ adsRouter.get("/:id", (req, res) => {
             <p>Duration time: ${ad.durationTime} days</p>
             <p>Active: ${ad.isActive}</p>
             </div>`);
-        },
-        text: function () {
-          res.send(
-            `ID: ${ad.id}, Title: ${ad.title}, Description: ${ad.description}, Author: ${ad.author}, Category: ${ad.category}, Tags: ${ad.tags}, Price: ${ad.price} ${ad.currency}, Location: ${ad.location}, Contact: ${ad.contact}, Creation date: ${ad.creationDate}, Duration time: ${ad.durationTime} days, Active: ${ad.isActive}`
-          );
-        },
-        json: function () {
-          res.json(ad);
-        },
-      });
-    } else {
-      res.status(404).end();
-    }
-  });
+      },
+      text: function () {
+        res.send(
+          `ID: ${ad.id}, Title: ${ad.title}, Description: ${ad.description}, Author: ${ad.author}, Category: ${ad.category}, Tags: ${ad.tags}, Price: ${ad.price} ${ad.currency}, Location: ${ad.location}, Contact: ${ad.contact}, Creation date: ${ad.creationDate}, Duration time: ${ad.durationTime} days, Active: ${ad.isActive}`
+        );
+      },
+      json: function () {
+        res.json(ad);
+      },
+    });
+  } else {
+    res.status(404).end();
+  }
 });
 
 adsRouter.get("/", async (req, res) => {
@@ -122,15 +122,12 @@ adsRouter.get("/", async (req, res) => {
   }
 });
 
-adsRouter.delete("/:id", (req, res) => {
-  Ad.findByIdAndRemove(req.params.id)
-    .then((result) => {
-      res.status(204).end();
-    })
-    .catch((error) => console.log(error));
+adsRouter.delete("/:id", async (req, res) => {
+  await Ad.findByIdAndRemove(req.params.id);
+  res.status(204).end();
 });
 
-adsRouter.put("/:id", (req, res) => {
+adsRouter.put("/:id", async (req, res) => {
   const body = req.body;
 
   const ad = {
@@ -148,11 +145,8 @@ adsRouter.put("/:id", (req, res) => {
     isActive: body.isActive,
   };
 
-  Ad.findByIdAndUpdate(req.params.id, ad, { new: true })
-    .then((updatedAd) => {
-      res.json(updatedAd);
-    })
-    .catch((error) => console.log(error));
+  updatedAd = await Ad.findByIdAndUpdate(req.params.id, ad, { new: true });
+  res.json(updatedAd);
 });
 
 module.exports = adsRouter;
