@@ -3,13 +3,12 @@ const Ad = require("../models/ad");
 
 adsRouter.post("/", async (req, res) => {
   const body = req.body;
-
-  const user = await user.findById(body.userId);
+  const user = res.locals.user;
 
   const ad = new Ad({
     title: body.title,
     description: body.description,
-    author: body.author,
+    author: user.fullName,
     category: body.category,
     tags: body.tags,
     price: body.price,
@@ -18,13 +17,18 @@ adsRouter.post("/", async (req, res) => {
     contact: body.contact,
     creationDate: new Date(),
     isActive: true,
+    user: user.id,
   });
 
-  ad.save()
-    .then((savedAd) => {
-      res.json(savedAd.toJSON());
-    })
-    .catch((error) => console.log(error.message));
+  const savedAd = await ad.save();
+  user.ads = user.ads.concat(savedAd._id);
+  await user.save();
+  res.json(savedAd);
+  //   ad.save()
+  //     .then((savedAd) => {
+  //       res.json(savedAd.toJSON());
+  //     })
+  //     .catch((error) => console.log(error.message));
 });
 
 adsRouter.get("/:id", (req, res) => {
@@ -62,12 +66,14 @@ adsRouter.get("/:id", (req, res) => {
   });
 });
 
-adsRouter.get("/", (req, res) => {
+adsRouter.get("/", async (req, res) => {
   const queryObj = req.query;
   if (!queryObj) {
-    Ad.find({}).then((ads) => {
-      res.json(ads);
+    const ads = await Ad.find({}).populate("user", {
+      username: 1,
+      fullName: 1,
     });
+    res.json(ads);
   } else {
     let caseInsensitiveQueryObj = { ...queryObj };
 
@@ -108,10 +114,11 @@ adsRouter.get("/", (req, res) => {
     console.log(queryStr);
 
     const query = JSON.parse(queryStr);
-
-    Ad.find(query).then((ads) => {
-      res.json(ads);
+    const ads = await Ad.find(query).populate("user", {
+      username: 1,
+      fullName: 1,
     });
+    res.json(ads);
   }
 });
 

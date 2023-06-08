@@ -19,7 +19,11 @@ usersRouter.post("/", async (req, res) => {
 });
 
 usersRouter.get("/", async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate("ads", {
+    title: 1,
+    isActive: 1,
+    creationDate: 1,
+  });
   res.json(users);
 });
 

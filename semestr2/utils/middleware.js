@@ -17,16 +17,19 @@ async function tokenVerification(token) {
   if (username === "" || password === "") {
     return false;
   }
-  const user = User.findOne({ username });
+  const user = await User.findOne({ username });
   const passwordIsCorrect =
     user === null ? false : await bcrypt.compare(password, user.passwordHash);
-  return passwordIsCorrect;
+  const result = { user, passwordIsCorrect };
+  return result;
 }
 
 const authMiddleware = async (req, res, next) => {
   const token = req.get("authorization");
+  const tokenVerificationResult = await tokenVerification(token);
+  res.locals.user = tokenVerificationResult.user;
 
-  if (await tokenVerification(token)) {
+  if (tokenVerificationResult.passwordIsCorrect || req.method === "GET") {
     next();
   } else {
     res.status(401).json({ error: "Invalid username or password!" });
