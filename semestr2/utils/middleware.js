@@ -2,12 +2,23 @@ const User = require("../models/user");
 const Ad = require("../models/ad");
 const bcrypt = require("bcrypt");
 const path = require("path");
+const fs = require("fs");
 
 const loggerMiddleware = (req, res, next) => {
-  console.log("Method:", req.method);
-  console.log("Path:", req.path);
-  console.log("Body:", req.body);
-  console.log("###############");
+  if (process.argv[2] === "debug") {
+    const { method, path } = req;
+    let requestTime = new Date().toString();
+    const requestLog = `Request time: ${requestTime},
+    Request method: ${method}, 
+    Request path: ${path}
+    ######################
+    `;
+    fs.appendFile("requestLogger.txt", requestLog, (error) => {
+      if (error) {
+        console.log(`There was an error: ${error}`);
+      }
+    });
+  }
   next();
 };
 

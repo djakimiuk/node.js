@@ -1,0 +1,13 @@
+Request time: Fri Jun 09 2023 16:40:16 GMT+0200 (czas środkowoeuropejski letni),
+    Request method: GET, 
+    Request path: /api/ads
+    ######################
+    Request time: Fri Jun 09 2023 16:40:28 GMT+0200 (czas środkowoeuropejski letni),
+    Request method: GET, 
+    Request path: /api/users
+    ######################
+    Request time: Fri Jun 09 2023 16:40:35 GMT+0200 (czas środkowoeuropejski letni),
+    Request method: GET, 
+    Request path: /api/users/647f607180fe508b63e5365e
+    ######################
+    
