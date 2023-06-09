@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Ad = require("../models/ad");
 const bcrypt = require("bcrypt");
 
 const loggerMiddleware = (req, res, next) => {
@@ -36,4 +37,18 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = { loggerMiddleware, authMiddleware };
+const adModificationGuard = async (req, res, next) => {
+  console.log(res.locals.params);
+  if (req.method !== "PUT" && req.method !== "DELETE") {
+    next();
+  }
+  const ad = await Ad.findById(res.locals.params.id);
+  const user = res.locals.user;
+  if (user.id === ad.user._id.toString()) {
+    next();
+  } else {
+    res.status(401).json({ error: "You are not allowed to modify that ad!" });
+  }
+};
+
+module.exports = { loggerMiddleware, authMiddleware, adModificationGuard };

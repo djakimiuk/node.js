@@ -1,5 +1,6 @@
 const adsRouter = require("express").Router();
 const Ad = require("../models/ad");
+const { authMiddleware, adModificationGuard } = require("../utils/middleware");
 
 adsRouter.post("/", async (req, res) => {
   const body = req.body;
@@ -33,7 +34,7 @@ adsRouter.post("/", async (req, res) => {
 
 adsRouter.get("/:id", async (req, res) => {
   const ad = await Ad.findById(req.params.id);
-  
+
   if (ad) {
     res.format({
       html: function () {
@@ -127,26 +128,34 @@ adsRouter.delete("/:id", async (req, res) => {
   res.status(204).end();
 });
 
-adsRouter.put("/:id", async (req, res) => {
-  const body = req.body;
+adsRouter.put(
+  "/:id",
+  (req, res, next) => {
+    res.locals.params = req.params;
+    next();
+  },
+  adModificationGuard,
+  async (req, res) => {
+    const body = req.body;
 
-  const ad = {
-    title: body.title,
-    description: body.description,
-    author: body.author,
-    category: body.category,
-    tags: body.tags,
-    price: body.price,
-    currency: body.currency,
-    location: body.location,
-    contact: body.contact,
-    creationDate: body.creationDate,
-    durationTime: body.durationTime,
-    isActive: body.isActive,
-  };
+    const ad = {
+      title: body.title,
+      description: body.description,
+      author: body.author,
+      category: body.category,
+      tags: body.tags,
+      price: body.price,
+      currency: body.currency,
+      location: body.location,
+      contact: body.contact,
+      creationDate: body.creationDate,
+      durationTime: body.durationTime,
+      isActive: body.isActive,
+    };
 
-  updatedAd = await Ad.findByIdAndUpdate(req.params.id, ad, { new: true });
-  res.json(updatedAd);
-});
+    updatedAd = await Ad.findByIdAndUpdate(req.params.id, ad, { new: true });
+    res.json(updatedAd);
+  }
+);
 
 module.exports = adsRouter;
