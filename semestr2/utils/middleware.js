@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Ad = require("../models/ad");
 const bcrypt = require("bcrypt");
+const path = require("path");
 
 const loggerMiddleware = (req, res, next) => {
   console.log("Method:", req.method);
@@ -49,4 +50,14 @@ const adModificationGuard = async (req, res, next) => {
   }
 };
 
-module.exports = { loggerMiddleware, authMiddleware, adModificationGuard };
+const unknownEndpoint = (req, res) => {
+  res.set("Content-Type", "image/png");
+  res.status(404).sendFile(path.join(__dirname, "../images/404image.avif"));
+};
+
+module.exports = {
+  loggerMiddleware,
+  authMiddleware,
+  adModificationGuard,
+  unknownEndpoint,
+};
