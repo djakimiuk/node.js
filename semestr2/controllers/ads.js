@@ -1,6 +1,6 @@
 const adsRouter = require("express").Router();
 const Ad = require("../models/ad");
-const { authMiddleware, adModificationGuard } = require("../utils/middleware");
+const { adModificationGuard } = require("../utils/middleware");
 
 adsRouter.post("/", async (req, res) => {
   const body = req.body;
@@ -123,10 +123,18 @@ adsRouter.get("/", async (req, res) => {
   }
 });
 
-adsRouter.delete("/:id", async (req, res) => {
-  await Ad.findByIdAndRemove(req.params.id);
-  res.status(204).end();
-});
+adsRouter.delete(
+  "/:id",
+  (req, res, next) => {
+    res.locals.params = req.params;
+    next();
+  },
+  adModificationGuard,
+  async (req, res) => {
+    await Ad.findByIdAndRemove(req.params.id);
+    res.status(204).end();
+  }
+);
 
 adsRouter.put(
   "/:id",

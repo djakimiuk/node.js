@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Full name required!"],
   },
+  role: {
+    type: String,
+    default: "user",
+  },
   passwordHash: { type: String, required: [true, "Password required!"] },
   ads: [
     {
@@ -38,6 +42,7 @@ userSchema.set("toJSON", {
     delete returnedObject._id;
     delete returnedObject.__v;
     delete returnedObject.passwordHash;
+    delete returnedObject.role;
   },
 });
 
