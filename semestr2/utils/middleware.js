@@ -66,9 +66,20 @@ const unknownEndpoint = (req, res) => {
   res.status(404).sendFile(path.join(__dirname, "../images/404image.avif"));
 };
 
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message);
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).json({ error: error.message });
+  }
+  next(error);
+};
+
 module.exports = {
   loggerMiddleware,
   authMiddleware,
   adModificationGuard,
   unknownEndpoint,
+  errorHandler,
 };

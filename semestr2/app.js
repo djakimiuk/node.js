@@ -19,6 +19,7 @@ app.get("/heartbeat", (req, res) => {
 
 app.use(express.static(path.join(__dirname, "./images")));
 app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
