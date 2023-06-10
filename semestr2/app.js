@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+require("express-async-errors");
 const app = express();
 const adsRouter = require("./controllers/ads");
 const usersRouter = require("./controllers/users");
