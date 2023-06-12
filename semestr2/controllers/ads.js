@@ -114,8 +114,6 @@ adsRouter.get("/", async (req, res) => {
 
     queryStr = queryStr.replace(operatorRegex, (match) => `$${match}`);
 
-    console.log(queryStr);
-
     const query = JSON.parse(queryStr);
     const ads = await Ad.find(query).populate("user", {
       username: 1,

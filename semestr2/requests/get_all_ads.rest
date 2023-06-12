@@ -1,4 +1,0 @@
-@host = http://localhost:{{{PORT}}
-
-GET {{host}}/ads
-Content-Type: application/json
